@@ -1,19 +1,15 @@
-import type { Dispatch, FC, SetStateAction } from "~node_modules/@types/react"
+import type { LabelData, LabelName } from "popup"
+import type { Dispatch, FC, SetStateAction } from "react"
 
 import Label from "./Label"
 
-type TagInputData = {
-  name: string
-  color: string
-}
-
 type Props = {
-  labelName: string
-  data: TagInputData
-  setData: Dispatch<SetStateAction<TagInputData>>
+  labelName: LabelName
+  data: LabelData
+  setData: Dispatch<SetStateAction<LabelData>>
 }
 
-const TagInput: FC<Props> = ({ labelName, data, setData }) => {
+const LabelInput: FC<Props> = ({ labelName, data, setData }) => {
   return (
     <div
       style={{
@@ -71,4 +67,4 @@ const TagInput: FC<Props> = ({ labelName, data, setData }) => {
   )
 }
 
-export default TagInput
+export default LabelInput
