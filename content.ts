@@ -1,6 +1,12 @@
+import type { PlasmoCSConfig } from "plasmo/dist/type"
+
 import { Storage } from "@plasmohq/storage/dist"
 
 import type { LabelData, LabelName } from "./popup"
+
+export const config: PlasmoCSConfig = {
+  matches: ["https://atcoder.jp/*"]
+}
 
 const titleLabelMap: Record<string, LabelName> = {
   正解: "AC",

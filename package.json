@@ -1,13 +1,13 @@
 {
   "name": "atcoder-label-customizer",
-  "displayName": "Atcoder label customizer",
-  "version": "0.0.1",
+  "displayName": "AtCoder Label Customizer",
+  "version": "1.0.0",
   "description": "AtCoderのラベルをカスタムするための拡張機能です。",
   "author": "hamao",
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
-    "package": "plasmo package"
+    "package": "plasmo build && plasmo package"
   },
   "dependencies": {
     "@plasmohq/storage": "^1.15.0",
@@ -27,7 +27,7 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*"
+      "https://atcoder.jp/*"
     ]
   }
 }
