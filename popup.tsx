@@ -2,15 +2,7 @@ import { useStorage } from "@plasmohq/storage/hook"
 
 import LabelInput from "./components/LabelInput"
 
-export type LabelName =
-  | "AC"
-  | "WA"
-  | "TLE"
-  | "MLE"
-  | "RE"
-  | "CE"
-  | "QLE"
-  | "OLE"
+export type LabelName = "AC" | "WA" | "TLE" | "MLE" | "RE" | "CE" | "QLE" | "OLE"
 export type LabelData<K extends string = string> = { name: K; color: string }
 type LabelDataMap = {
   [K in LabelName]: LabelData<K>
@@ -28,14 +20,33 @@ const defaultData: LabelDataMap = {
 }
 
 function IndexPopup() {
-  const [dataAC, setDataAC] = useStorage<LabelData>("AC", defaultData["AC"])
-  const [dataWA, setDataWA] = useStorage<LabelData>("WA", defaultData["WA"])
-  const [dataTLE, setDataTLE] = useStorage<LabelData>("TLE", defaultData["TLE"])
-  const [dataMLE, setDataMLE] = useStorage<LabelData>("MLE", defaultData["MLE"])
-  const [dataRE, setDataRE] = useStorage<LabelData>("RE", defaultData["RE"])
-  const [dataCE, setDataCE] = useStorage<LabelData>("CE", defaultData["CE"])
-  const [dataQLE, setDataQLE] = useStorage<LabelData>("QLE", defaultData["QLE"])
-  const [dataOLE, setDataOLE] = useStorage<LabelData>("OLE", defaultData["OLE"])
+  const [dataAC, setDataAC, { setRenderValue: setRenderValueAC, setStoreValue: setStoreValueAC }] =
+    useStorage<LabelData>("AC", defaultData["AC"])
+  const [dataWA, setDataWA, { setRenderValue: setRenderValueWA, setStoreValue: setStoreValueWA }] =
+    useStorage<LabelData>("WA", defaultData["WA"])
+  const [dataTLE, setDataTLE, { setRenderValue: setRenderValueTLE, setStoreValue: setStoreValueTLE }] =
+    useStorage<LabelData>("TLE", defaultData["TLE"])
+  const [dataMLE, setDataMLE, { setRenderValue: setRenderValueMLE, setStoreValue: setStoreValueMLE }] =
+    useStorage<LabelData>("MLE", defaultData["MLE"])
+  const [dataRE, setDataRE, { setRenderValue: setRenderValueRE, setStoreValue: setStoreValueRE }] =
+    useStorage<LabelData>("RE", defaultData["RE"])
+  const [dataCE, setDataCE, { setRenderValue: setRenderValueCE, setStoreValue: setStoreValueCE }] =
+    useStorage<LabelData>("CE", defaultData["CE"])
+  const [dataQLE, setDataQLE, { setRenderValue: setRenderValueQLE, setStoreValue: setStoreValueQLE }] =
+    useStorage<LabelData>("QLE", defaultData["QLE"])
+  const [dataOLE, setDataOLE, { setRenderValue: setRenderValueOLE, setStoreValue: setStoreValueOLE }] =
+    useStorage<LabelData>("OLE", defaultData["OLE"])
+
+  const saveData = () => {
+    setStoreValueAC(dataAC)
+    setStoreValueWA(dataWA)
+    setStoreValueTLE(dataTLE)
+    setStoreValueMLE(dataMLE)
+    setStoreValueRE(dataRE)
+    setStoreValueCE(dataCE)
+    setStoreValueQLE(dataQLE)
+    setStoreValueOLE(dataOLE)
+  }
 
   const resetData = () => {
     if (!confirm("リセットしますか？")) {
@@ -53,21 +64,29 @@ function IndexPopup() {
 
   return (
     <div>
-      <LabelInput labelName="AC" data={dataAC} setData={setDataAC} />
-      <LabelInput labelName="WA" data={dataWA} setData={setDataWA} />
-      <LabelInput labelName="TLE" data={dataTLE} setData={setDataTLE} />
-      <LabelInput labelName="MLE" data={dataMLE} setData={setDataMLE} />
-      <LabelInput labelName="RE" data={dataRE} setData={setDataRE} />
-      <LabelInput labelName="CE" data={dataCE} setData={setDataCE} />
-      <LabelInput labelName="QLE" data={dataQLE} setData={setDataQLE} />
-      <LabelInput labelName="OLE" data={dataOLE} setData={setDataOLE} />
+      <LabelInput labelName="AC" data={dataAC} setData={setRenderValueAC} />
+      <LabelInput labelName="WA" data={dataWA} setData={setRenderValueWA} />
+      <LabelInput labelName="TLE" data={dataTLE} setData={setRenderValueTLE} />
+      <LabelInput labelName="MLE" data={dataMLE} setData={setRenderValueMLE} />
+      <LabelInput labelName="RE" data={dataRE} setData={setRenderValueRE} />
+      <LabelInput labelName="CE" data={dataCE} setData={setRenderValueCE} />
+      <LabelInput labelName="QLE" data={dataQLE} setData={setRenderValueQLE} />
+      <LabelInput labelName="OLE" data={dataOLE} setData={setRenderValueOLE} />
       <div
         style={{
           display: "flex",
-          justifyContent: "end",
-          gap: "8px"
+          justifyContent: "space-between",
+          gap: "8px",
+          marginTop: "4px"
         }}>
-        <button onClick={resetData}>リセット</button>
+        <button onClick={resetData}>reset</button>
+        <button
+          onClick={() => {
+            saveData()
+            window.close()
+          }}>
+          save
+        </button>
       </div>
     </div>
   )

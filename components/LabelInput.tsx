@@ -1,5 +1,5 @@
 import type { LabelData, LabelName } from "popup"
-import type { Dispatch, FC, SetStateAction } from "react"
+import type { ChangeEvent, Dispatch, FC, SetStateAction } from "react"
 
 import Label from "./Label"
 
