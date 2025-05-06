@@ -13,8 +13,21 @@ const titleLabelMap: Record<string, LabelName> = {
   出力長制限超過: "OLE"
 }
 
-const main = async () => {
-  const storage = new Storage()
+const storage = new Storage()
+storage.watch(
+  (() => {
+    const labelNames = Object.values(titleLabelMap)
+    const callbackMap: Record<string, () => void> = {}
+    for (const labelName of labelNames) {
+      callbackMap[labelName] = () => {
+        updateLabel()
+      }
+    }
+    return callbackMap
+  })()
+)
+
+const updateLabel = async () => {
   const lables = document.querySelectorAll(".label")
   for (const label of lables as NodeListOf<HTMLElement>) {
     const originalTitle = label.getAttribute("data-original-title")
@@ -29,6 +42,10 @@ const main = async () => {
     label.innerHTML = labelData.name
     label.style.backgroundColor = labelData.color
   }
+}
+
+const main = async () => {
+  updateLabel()
 }
 
 main()
