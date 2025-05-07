@@ -1,7 +1,7 @@
 {
   "name": "atcoder-label-customizer",
   "displayName": "AtCoder Label Customizer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "AtCoderのラベルの自由なカスタマイズを可能にする拡張機能です。",
   "author": "hamao",
   "scripts": {
