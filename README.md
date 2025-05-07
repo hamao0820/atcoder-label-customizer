@@ -1,33 +1,50 @@
-This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
+# AtCoder Label Customizer
 
-## Getting Started
+AtCoderのラベルを自由にカスタマイズ出来るようにするChrome拡張です。
 
-First, run the development server:
+## 機能
 
-```bash
-pnpm dev
-# or
-npm run dev
-```
+- ラベルの色を変更
+- ラベルの名前を変更
 
-Open your browser and load the appropriate development build. For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
+## インストール
 
-You can start editing the popup by modifying `popup.tsx`. It should auto-update as you make changes. To add an options page, simply add a `options.tsx` file to the root of the project, with a react component default exported. Likewise to add a content page, add a `content.ts` file to the root of the project, importing some module and do some logic, then reload the extension on your browser.
+Chromeウェブストアからインストールできます。
 
-For further guidance, [visit our Documentation](https://docs.plasmo.com/)
+[AtCoder Label Customizer](https://chromewebstore.google.com/detail/atcoder-label-customizer/jfgmfcnlmgolnfadehfomajomolbadhl?utm_source=item-share-x)
 
-## Making production build
+## 開発
 
-Run the following:
+1. リポジトリをcloneする。
 
 ```bash
-pnpm build
-# or
-npm run build
+git clone https://github.com/hamao0820/atcoder-label-customizer.git
 ```
 
-This should create a production bundle for your extension, ready to be zipped and published to the stores.
+あるいは
 
-## Submit to the webstores
+```bash
+gh repo clone hamao0820/atcoder-label-customizer
+```
 
-The easiest way to deploy your Plasmo extension is to use the built-in [bpp](https://bpp.browser.market) GitHub action. Prior to using this action however, make sure to build your extension and upload the first version to the store to establish the basic credentials. Then, simply follow [this setup instruction](https://docs.plasmo.com/framework/workflows/submit) and you should be on your way for automated submission!
+2. 依存関係をインストールする。
+
+```
+pnpm install
+```
+
+3. 開発者モードで拡張機能を読み込む。
+
+```
+pnpm run dev
+```
+
+`./build/chrome-mv3-dev`をChromeの拡張機能として読み込む。
+
+4. プロダクトビルド
+
+```
+pnpm run build
+```
+
+`./build/chrome-mv3`にビルドされる。
