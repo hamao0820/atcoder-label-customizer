@@ -98,9 +98,11 @@ const updateLabel = async (label: HTMLElement) => {
 
 const updateLabels = async () => {
   const labels = document.querySelectorAll(".label")
-  for (const label of labels as NodeListOf<HTMLElement>) {
-    await updateLabel(label)
-  }
+  await Promise.all(
+    Array.from(labels).map((label) => {
+      return updateLabel(label as HTMLElement)
+    })
+  )
 }
 
 const isJudgingOrWaiting = (label: HTMLElement): boolean => {
