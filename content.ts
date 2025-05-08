@@ -21,12 +21,69 @@ const titleLabelMap: Record<string, LabelName> = {
 
 const storage = new Storage()
 
-const getLabelName = (label: HTMLElement): LabelName | "" => {
-  const originalTitle = label.getAttribute("data-original-title")
-  if (originalTitle === null || originalTitle === "") {
-    return ""
+const main = async () => {
+  storage.watch(
+    (() => {
+      const labelNames = Object.values(titleLabelMap)
+      const callbackMap: Record<string, () => void> = {}
+      for (const labelName of labelNames) {
+        callbackMap[labelName] = () => {
+          updateLabels()
+        }
+      }
+      return callbackMap
+    })()
+  )
+
+  const trs = document.querySelectorAll("tbody tr")
+  for (const tr of trs as NodeListOf<HTMLElement>) {
+    if (
+      !tr.matches(':has(.label[data-original-title="ジャッジ中"])') &&
+      !tr.matches(':has(.label[data-original-title="ジャッジ待ち"])')
+    ) {
+      continue
+    }
+    const observer = new MutationObserver(async (mutations) => {
+      observer.disconnect()
+      for (const mutation of mutations) {
+        if (mutation.type !== "childList") {
+          continue
+        }
+        const tr = mutation.target as HTMLElement
+        if (!tr.matches("tr")) {
+          continue
+        }
+        const label: HTMLElement | null = tr.querySelector(".label")
+        if (label === null) {
+          continue
+        }
+        await updateLabel(label)
+      }
+      observer.observe(tr, {
+        attributes: true,
+        childList: true,
+        subtree: true
+      })
+    })
+    observer.observe(tr, {
+      attributes: true,
+      childList: true,
+      subtree: true
+    })
   }
-  const labelName = titleLabelMap[originalTitle]
+
+  updateLabels()
+}
+
+const getLabelName = (label: HTMLElement): LabelName | "" => {
+  let title = label.getAttribute("data-original-title")
+  if (title === null || title === "") {
+    title = label.getAttribute("title")
+    if (title === null || title === "") {
+      return ""
+    }
+  }
+  const labelName = titleLabelMap[title]
   if (labelName === undefined) {
     return ""
   }
@@ -48,23 +105,6 @@ const updateLabels = async () => {
   for (const label of labels as NodeListOf<HTMLElement>) {
     await updateLabel(label)
   }
-}
-
-const main = async () => {
-  storage.watch(
-    (() => {
-      const labelNames = Object.values(titleLabelMap)
-      const callbackMap: Record<string, () => void> = {}
-      for (const labelName of labelNames) {
-        callbackMap[labelName] = () => {
-          updateLabels()
-        }
-      }
-      return callbackMap
-    })()
-  )
-
-  updateLabels()
 }
 
 main()
