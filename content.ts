@@ -20,18 +20,6 @@ const titleLabelMap: Record<string, LabelName> = {
 }
 
 const storage = new Storage()
-storage.watch(
-  (() => {
-    const labelNames = Object.values(titleLabelMap)
-    const callbackMap: Record<string, () => void> = {}
-    for (const labelName of labelNames) {
-      callbackMap[labelName] = () => {
-        updateLabels()
-      }
-    }
-    return callbackMap
-  })()
-)
 
 const getLabelName = (label: HTMLElement): LabelName | "" => {
   const originalTitle = label.getAttribute("data-original-title")
@@ -63,6 +51,19 @@ const updateLabels = async () => {
 }
 
 const main = async () => {
+  storage.watch(
+    (() => {
+      const labelNames = Object.values(titleLabelMap)
+      const callbackMap: Record<string, () => void> = {}
+      for (const labelName of labelNames) {
+        callbackMap[labelName] = () => {
+          updateLabels()
+        }
+      }
+      return callbackMap
+    })()
+  )
+
   updateLabels()
 }
 
