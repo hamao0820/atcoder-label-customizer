@@ -2,7 +2,7 @@ import { useStorage } from "@plasmohq/storage/hook"
 
 import LabelInput from "./components/LabelInput"
 
-export type LabelName = "AC" | "WA" | "TLE" | "MLE" | "RE" | "CE" | "QLE" | "OLE"
+export type LabelName = "AC" | "WA" | "TLE" | "MLE" | "RE" | "CE" | "QLE" | "OLE" | "WJ" | "judging"
 export type LabelData<K extends string = string> = { name: K; color: string }
 type LabelDataMap = {
   [K in LabelName]: LabelData<K>
@@ -16,7 +16,9 @@ const defaultData: LabelDataMap = {
   RE: { name: "RE", color: "#f0ad4e" },
   CE: { name: "CE", color: "#f0ad4e" },
   QLE: { name: "QLE", color: "#f0ad4e" },
-  OLE: { name: "OLE", color: "#f0ad4e" }
+  OLE: { name: "OLE", color: "#f0ad4e" },
+  WJ: { name: "WJ", color: "#777777" },
+  judging: { name: "judging", color: "#777777" }
 }
 
 function IndexPopup() {

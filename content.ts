@@ -16,7 +16,9 @@ const titleLabelMap: Record<string, LabelName> = {
   実行時エラー: "RE",
   コンパイルエラー: "CE",
   クエリ回数制限超過: "QLE",
-  出力長制限超過: "OLE"
+  出力長制限超過: "OLE",
+  ジャッジ待ち: "WJ",
+  ジャッジ中: "judging"
 }
 
 const storage = new Storage()
@@ -37,36 +39,22 @@ const main = async () => {
 
   const trs = document.querySelectorAll("tbody tr")
   for (const tr of trs as NodeListOf<HTMLElement>) {
-    if (
-      !tr.matches(':has(.label[data-original-title="ジャッジ中"])') &&
-      !tr.matches(':has(.label[data-original-title="ジャッジ待ち"])')
-    ) {
+    if (tr.querySelector(".waiting-judge") === null) {
       continue
     }
-    const observer = new MutationObserver(async (mutations) => {
+    const observer = new MutationObserver(async () => {
       observer.disconnect()
-      for (const mutation of mutations) {
-        if (mutation.type !== "childList") {
-          continue
-        }
-        const tr = mutation.target as HTMLElement
-        if (!tr.matches("tr")) {
-          continue
-        }
-        const label: HTMLElement | null = tr.querySelector(".label")
-        if (label === null) {
-          continue
-        }
-        await updateLabel(label)
+      const label: HTMLElement | null = tr.querySelector(".label")
+      if (label === null) {
+        return
       }
+      await updateLabel(label)
       observer.observe(tr, {
-        attributes: true,
         childList: true,
         subtree: true
       })
     })
     observer.observe(tr, {
-      attributes: true,
       childList: true,
       subtree: true
     })
@@ -96,7 +84,15 @@ const updateLabel = async (label: HTMLElement) => {
     return
   }
   const labelData = await storage.get<LabelData>(labelName)
-  label.innerHTML = labelData.name
+  if (labelData === undefined) {
+    return
+  }
+  if (isJudgingOrWaiting(label)) {
+    const text = label.innerHTML
+    label.innerHTML = text.replace(/^(\d+\/\d+) .+$/, `$1 ${labelData.name}`)
+  } else {
+    label.innerHTML = labelData.name
+  }
   label.style.backgroundColor = labelData.color
 }
 
@@ -105,6 +101,14 @@ const updateLabels = async () => {
   for (const label of labels as NodeListOf<HTMLElement>) {
     await updateLabel(label)
   }
+}
+
+const isJudgingOrWaiting = (label: HTMLElement): boolean => {
+  const parent = label.parentElement
+  if (parent === null) {
+    return false
+  }
+  return parent.classList.contains("waiting-judge")
 }
 
 main()
