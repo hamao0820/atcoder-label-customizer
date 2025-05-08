@@ -26,32 +26,44 @@ storage.watch(
     const callbackMap: Record<string, () => void> = {}
     for (const labelName of labelNames) {
       callbackMap[labelName] = () => {
-        updateLabel()
+        updateLabels()
       }
     }
     return callbackMap
   })()
 )
 
-const updateLabel = async () => {
-  const lables = document.querySelectorAll(".label")
-  for (const label of lables as NodeListOf<HTMLElement>) {
-    const originalTitle = label.getAttribute("data-original-title")
-    if (originalTitle === null || originalTitle === "") {
-      continue
-    }
-    const labelName = titleLabelMap[originalTitle]
-    if (labelName === undefined) {
-      continue
-    }
-    const labelData = await storage.get<LabelData>(labelName)
-    label.innerHTML = labelData.name
-    label.style.backgroundColor = labelData.color
+const getLabelName = (label: HTMLElement): LabelName | "" => {
+  const originalTitle = label.getAttribute("data-original-title")
+  if (originalTitle === null || originalTitle === "") {
+    return ""
+  }
+  const labelName = titleLabelMap[originalTitle]
+  if (labelName === undefined) {
+    return ""
+  }
+  return labelName
+}
+
+const updateLabel = async (label: HTMLElement) => {
+  const labelName = getLabelName(label)
+  if (labelName === "") {
+    return
+  }
+  const labelData = await storage.get<LabelData>(labelName)
+  label.innerHTML = labelData.name
+  label.style.backgroundColor = labelData.color
+}
+
+const updateLabels = async () => {
+  const labels = document.querySelectorAll(".label")
+  for (const label of labels as NodeListOf<HTMLElement>) {
+    await updateLabel(label)
   }
 }
 
 const main = async () => {
-  updateLabel()
+  updateLabels()
 }
 
 main()
